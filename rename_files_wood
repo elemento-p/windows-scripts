@@ -1,0 +1,45 @@
+# This script adds the revision number to a file name.
+
+# set root and Ready_folder if different than below.
+
+from genericpath import exists
+import os
+import shutil
+from pathlib import Path
+
+# working folders
+Upload_folder = r'C:\Users\dsmith\OneDrive - LEWA GmbH\Desktop\Local Work\xmitAL\wood\Upload'
+Ready_folder = r'C:\Users\dsmith\OneDrive - LEWA GmbH\Desktop\Local Work\xmitAL\wood\Ready'
+
+# Use this to strip Revision for upload
+
+# change working directory
+os.chdir(Upload_folder)
+
+
+# go through sub-folders and move file to Ready_folder folder
+totalFiles = 0
+moveFiles = 0
+
+
+for dirpath, dirnames, filenames in os.walk(Ready_folder):
+    for filename in filenames:
+        new_filename = filename[:-8] + '.pdf'
+        src = os.path.join(dirpath, filename)
+        dest = os.path.join(Upload_folder, new_filename)
+        if os.path.isfile(dest):
+            print(f'{filename} already exists, skipping.')
+            totalFiles += 1
+        else:
+            print(f'Moving {filename} to {Ready_folder}')
+            shutil.copy(src, dest)
+            totalFiles += 1
+            moveFiles += 1
+            
+        
+print(f'\n \nSource: {Upload_folder}' )
+print(f'Ready_folder: {Ready_folder} \n')
+print(f'\n \nTotal files: {totalFiles}. \n')  
+print(f'Moved {moveFiles} files \n') 
+print(f'Skipped {totalFiles - moveFiles} files. \n')
+
